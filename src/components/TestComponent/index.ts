@@ -27,10 +27,6 @@ export class TestComponent extends ComponentBase {
             this.age--;
             this.invalidate();
         });
-
-        this.registerEvent(`.${styles.container}`, "click", e => {
-            console.log(this._listeners.reduce((p, c) => p + (c.connected ? 1 : 0), 0));
-        });
     }
 
     protected render(): string {

@@ -17,7 +17,7 @@ export class ToDoListComponent extends ComponentBase {
     private initialize(): void {
         this.items = [];
         this.registerEvent("#addButton", "click", () => this.onAddItemClick());
-        this.registerEvent("#removeButton", "click", () => this.onRemoveItemClick());
+        this.registerEvent("todo-item", "onRemove", (e: CustomEvent<ToDoItemComponent>) => this.onRemoveItem(e.detail));
     }
 
     private onAddItemClick(): void {
@@ -25,31 +25,25 @@ export class ToDoListComponent extends ComponentBase {
         this.invalidate();
     }
 
-    private onRemoveItemClick(): void {
-        this.items.splice(this.items.length - 1, 1);
+    private onRemoveItem(item: ToDoItemComponent): void {
+        this.items.splice(this.items.indexOf(item.item), 1);
+        this.items.forEach((x, i) => (x.index = i + 1));
         this.invalidate();
     }
 
     protected render(): string {
         return html`<div class="${styles.container}">
             <h1>TODO List (${this.items.length})</h1>
-            <div class="${styles.items}">${this.items.map((x, i) => html`<todo-item key="${x.index}"></todo-item>`).join("")}</div>
+            <div class="${styles.items}">${this.items.map((x, i) => html`<todo-item ref="${x.index}"></todo-item>`).join("")}</div>
             <div>
                 <button id="addButton">Add Item</button>
-                <button id="removeButton">Remove Item</button>
             </div>
         </div>`;
     }
 
     protected afterRender(): void {
-        const todoItemViews = this.querySelectorAll<ToDoItemComponent>("todo-item");
-
-        todoItemViews.forEach(todoItemView => {
-            const todoItem = this.items.find(x => x.index === Number(todoItemView.getAttribute("key")));
-
-            if (todoItem) {
-                todoItemView.item = todoItem;
-            }
-        });
+        for (const item of this.items) {
+            (this.refs[item.index] as ToDoItemComponent).item = item;
+        }
     }
 }

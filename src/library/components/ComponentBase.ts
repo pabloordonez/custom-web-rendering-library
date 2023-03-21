@@ -1,11 +1,20 @@
 import { Event, EventListener, EventName } from "./EventListener";
 
+type RefMap = { [key: string]: Element };
+
 export class ComponentBase extends HTMLElement {
-    protected _listeners: Array<EventListener>;
+    private _listeners: Array<EventListener>;
+
+    private _refs: { [key: string]: Element };
+
+    protected get refs(): RefMap {
+        return this._refs;
+    }
 
     constructor() {
         super();
         this._listeners = [];
+        this._refs = {};
     }
 
     connectedCallback(): void {
@@ -30,7 +39,7 @@ export class ComponentBase extends HTMLElement {
 
     protected afterRender(): void {}
 
-    protected registerEvent(selector: string, event: EventName, func: Event): EventListener {
+    protected registerEvent(selector: string, event: EventName | string, func: Event): EventListener {
         const eventListener = new EventListener(this, selector, event, func);
         this._listeners.push(eventListener);
         return eventListener;
@@ -50,6 +59,14 @@ export class ComponentBase extends HTMLElement {
         this.invalidate();
     }
 
+    protected processReferences(): void {
+        const elements = this.querySelectorAll("[ref]");
+
+        elements.forEach(element => {
+            this.refs[element.getAttribute("ref")] = element;
+        });
+    }
+
     protected invalidate(): void {
         // 1. disconnect all listeners.
         this._listeners.forEach(x => x.disconnect());
@@ -57,6 +74,7 @@ export class ComponentBase extends HTMLElement {
         // 2. render the component again.
         this.beforeRender();
         this.innerHTML = this.render();
+        this.processReferences();
         this.afterRender();
 
         // 3. try to connect listeners again.

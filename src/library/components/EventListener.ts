@@ -8,15 +8,20 @@ export class EventListener {
         return this._connected;
     }
 
-    constructor(public readonly parent: HTMLElement, public readonly selector: string, public readonly event: EventName, public readonly func: Event) {}
+    constructor(
+        public readonly parent: HTMLElement,
+        public readonly selector: string,
+        public readonly event: EventName | string,
+        public readonly func: Event
+    ) {}
 
     connect(): boolean {
         try {
             if (this._connected) this.disconnect();
-            const element = this.parent.querySelector(this.selector);
-            if (!element) return false;
+            const elements = this.parent.querySelectorAll(this.selector);
+            if (!elements) return false;
 
-            element.addEventListener(this.event, this.func);
+            elements.forEach(element => element.addEventListener(this.event, this.func));
             this._connected = true;
             return true;
         } catch {
@@ -27,10 +32,10 @@ export class EventListener {
     disconnect(): void {
         try {
             if (!this._connected) return;
-            const element = this.parent.querySelector(this.selector);
-            if (!element) return;
+            const elements = this.parent.querySelectorAll(this.selector);
+            if (!elements) return;
 
-            element.removeEventListener(this.event, this.func);
+            elements.forEach(element => element.removeEventListener(this.event, this.func));
             this._connected = false;
         } catch {
             // TODO: replace with logger

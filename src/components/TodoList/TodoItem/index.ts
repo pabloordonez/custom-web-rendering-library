@@ -1,6 +1,5 @@
 import { ComponentBase } from "../../../library/components/ComponentBase";
 import { Component } from "../../../library/decorators/component/Component";
-import { Property } from "../../../library/decorators/property/Property";
 import html from "../../../library/interpolation/html";
 import styles from "./TodoList.module.scss";
 
@@ -28,6 +27,7 @@ export class ToDoItemComponent extends ComponentBase {
 
     private initialize(): void {
         this.registerEvent("#message", "change", (e: InputEvent) => this.onValueChange(e));
+        this.registerEvent("#removeButton", "click", () => this.onRemoveItemClick());
     }
 
     private onValueChange(e: InputEvent): void {
@@ -35,11 +35,16 @@ export class ToDoItemComponent extends ComponentBase {
         console.log(this.item.message);
     }
 
+    private onRemoveItemClick(): void {
+        this.dispatchEvent(new CustomEvent<ToDoItemComponent>("onRemove", { bubbles: true, cancelable: false, detail: this }));
+    }
+
     protected render(): string {
         if (!this.item) return "";
         return html`<div class="${styles.todoItem}">
             <span>${this.item.index}: </span>
             <input id="message" name="message[${this.item.index}]" value="${this.item.message}" />
+            <button id="removeButton">Remove Item</button>
         </div>`;
     }
 }
