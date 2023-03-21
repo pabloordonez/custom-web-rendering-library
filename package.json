@@ -1,0 +1,35 @@
+{
+    "devDependencies": {
+        "@miracledevs/paradigm-web-di": "^1.0.3",
+        "@webpack-cli/generators": "^3.0.1",
+        "autoprefixer": "^10.4.14",
+        "css-loader": "^6.7.3",
+        "html-webpack-plugin": "^5.5.0",
+        "mini-css-extract-plugin": "^2.7.5",
+        "postcss-loader": "^7.1.0",
+        "prettier": "^2.8.6",
+        "sass": "^1.59.3",
+        "sass-loader": "^13.2.1",
+        "ts-loader": "^9.4.2",
+        "typescript": "^5.0.2",
+        "webpack": "^5.76.2",
+        "webpack-cli": "^5.0.1",
+        "webpack-dev-server": "^4.13.1"
+    },
+    "version": "1.0.0",
+    "description": "My webpack project",
+    "name": "my-webpack-project",
+    "scripts": {
+        "prestart": "npm install",
+        "start": "npm run serve",
+        "build": "webpack --mode=production --node-env=production",
+        "build:dev": "webpack --mode=development",
+        "build:prod": "webpack --mode=production --node-env=production",
+        "watch": "webpack --watch",
+        "serve": "webpack serve",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "reflect-metadata": "^0.1.13"
+    }
+}
