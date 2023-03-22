@@ -9,7 +9,7 @@ export class ToDoItem {
 
 @Component({ selector: "todo-item" })
 export class ToDoItemComponent extends ComponentBase {
-    private _item: ToDoItem;
+    private _item?: ToDoItem;
 
     private readonly _event: CustomEvent<ToDoItemComponent>;
 
@@ -18,7 +18,7 @@ export class ToDoItemComponent extends ComponentBase {
         this.invalidate();
     }
 
-    get item(): ToDoItem {
+    get item(): ToDoItem | undefined {
         return this._item;
     }
 

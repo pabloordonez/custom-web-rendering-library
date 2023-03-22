@@ -84,6 +84,7 @@ const config = {
     resolve: {
         extensions: [".ts", ".js", ".css", ".scss"],
         alias: {
+            "components": path.join(__dirname, "src", "components"),
             "library": path.join(__dirname, "src", "library")
         }
     }

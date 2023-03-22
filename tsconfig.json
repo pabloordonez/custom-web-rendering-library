@@ -12,6 +12,7 @@
         "baseUrl": "./src/",
         "typeRoots": ["./node_modules/@types", "./node_modules/@miracledevs", "./src/typings"],
         "paths": {
+            "components": ["./components/*" ],
             "library": ["./library/*"]
         }
     },

@@ -27,31 +27,26 @@ export class ComponentBase extends HTMLElement {
         this.disconnectEvents();
     }
 
-    protected attributeChangedCallback(name: string, oldValue: any, newValue: any) {
-        (this as any)[name] = newValue;
-        this.invalidate();
-    }
+    invalidate(reRender: boolean = true): void {
+        // if the component is not connected, does not makes sense to render.
+        if (!this.isConnected) return;
 
-    protected processReferences(): void {
-        const elements = this.querySelectorAll("[ref]");
-
-        elements.forEach(element => {
-            this.refs[element.getAttribute("ref")] = element;
-        });
-    }
-
-    protected invalidate(): void {
         // 1. disconnect all listeners.
         this.disconnectEvents();
 
         // 2. render the component again.
         this.beforeRender();
-        this.innerHTML = this.render();
+        if (reRender) this.innerHTML = this.render();
         this.processReferences();
         this.afterRender();
 
         // 3. try to connect listeners again.
         this.connectEvents();
+    }
+
+    protected attributeChangedCallback(name: string, oldValue: any, newValue: any) {
+        (this as any)[name] = newValue;
+        this.invalidate();
     }
 
     protected onCreated(): void {}
@@ -66,9 +61,17 @@ export class ComponentBase extends HTMLElement {
 
     protected afterRender(): void {}
 
+    private processReferences(): void {
+        const elements = this.querySelectorAll("[ref]");
+
+        elements.forEach(element => {
+            this.refs[element.getAttribute("ref")] = element;
+        });
+    }
+
     private connectEvents(): void {
         const componentType = ComponentTypeCollection.globalInstance.get(this.constructor as any);
-        const listeners =  componentType.events;
+        const listeners = componentType.events;
         this._eventListenerInstances = listeners.map(x => x.connect(this)).reduce((p, c) => p.concat(c));
     }
 

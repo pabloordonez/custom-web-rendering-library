@@ -1,6 +1,7 @@
-export { TestComponent } from "./components/TestComponent";
-export { ToDoListComponent, ToDoItemComponent } from "./components/TodoList";
-import { ComponentTypeCollection } from "./library/decorators/components";
+export { TestComponent } from "components/TestComponent";
+export { ToDoListComponent, ToDoItemComponent } from "components/TodoList";
+export { PerformantToDoListComponent } from "components/PerformantTodoList";
+import { ComponentTypeCollection } from "library/decorators/components";
 import { html } from "./library/interpolation";
 import styles from "./index.module.scss";
 
@@ -10,6 +11,7 @@ document.getElementById("root").innerHTML = html`
     <main class="${styles.main}">
         <h1>Test Page</h1>
         <todo-list></todo-list>
+        <perf-todo-list></perf-todo-list>
         <test-component name="Peter O'Tool" age="16"></test-component>
     </main>
 `;
