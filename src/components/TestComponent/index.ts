@@ -29,7 +29,7 @@ export class TestComponent extends ComponentBase {
 
     protected render(): string {
         return html`<div class=${styles.container}>
-            <h1>Test Component</h1>
+            <h2>Test Component</h2>
             <div class=${styles.field}>
                 <span>Name: </span>
                 <span>${this.name}</span>

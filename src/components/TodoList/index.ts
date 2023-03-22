@@ -30,7 +30,7 @@ export class ToDoListComponent extends ComponentBase {
 
     protected render(): string {
         return html`<div class="${styles.container}">
-            <h1>TODO List (${this.items.length})</h1>
+            <h2>TODO List (${this.items.length})</h2>
             <div class="${styles.items}">${this.items.map((x, i) => html`<todo-item ref="${x.index}"></todo-item>`).join("")}</div>
             <div>
                 <button id="addButton">Add Item</button>
