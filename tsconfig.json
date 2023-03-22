@@ -9,8 +9,11 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "allowJs": true,
-        "rootDir": "./src/",
-        "typeRoots": ["./node_modules/@types", "./node_modules/@miracledevs", "./src/typings"]
+        "baseUrl": "./src/",
+        "typeRoots": ["./node_modules/@types", "./node_modules/@miracledevs", "./src/typings"],
+        "paths": {
+            "library": ["./library/*"]
+        }
     },
-    "include": ["./src/**/*.ts"],
+    "include": ["./src/**/*.ts"]
 }

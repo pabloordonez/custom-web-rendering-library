@@ -1,7 +1,6 @@
-import { ComponentBase } from "../../../library/components/ComponentBase";
-import { Component } from "../../../library/decorators/component/Component";
-import { EventHandler } from "../../../library/decorators/component/EventHandler";
-import html from "../../../library/interpolation/html";
+import { ComponentBase } from "library/components";
+import { Component, EventHandler } from "library/decorators/components";
+import { html } from "library/interpolation";
 import styles from "./TodoList.module.scss";
 
 export class ToDoItem {

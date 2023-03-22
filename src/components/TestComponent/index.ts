@@ -1,9 +1,7 @@
-import { Component } from "../../library/decorators/component/Component";
-import { Property } from "../../library/decorators/component/Property";
-import { ComponentBase } from "../../library/components/ComponentBase";
-import html from "../../library/interpolation/html";
+import { Component, Property, EventHandler } from "library/decorators/components";
+import { ComponentBase } from "library/components";
+import { html } from "library/interpolation";
 import styles from "./TestComponent.module.scss";
-import { EventHandler } from "../../library/decorators/component/EventHandler";
 
 @Component({ selector: "test-component" })
 export class TestComponent extends ComponentBase {

@@ -1,5 +1,4 @@
-import { ComponentTypeCollection } from "../decorators/component/ComponentTypeCollection";
-import { EventListenerInstance } from "./EventListenerInstance";
+import { EventListenerInstance, ComponentTypeCollection } from "../decorators/components";
 
 type RefMap = { [key: string]: Element };
 

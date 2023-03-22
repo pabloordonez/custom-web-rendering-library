@@ -1,5 +1,5 @@
+import { ObjectType } from "../../dependencyInjection";
 import { ComponentType } from "./ComponentType";
-import { getObjectTypeName, ObjectType } from "../../shared/object-type";
 
 export class ComponentTypeCollection {
     private static _globalInstance: ComponentTypeCollection;

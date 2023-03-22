@@ -1,5 +1,5 @@
-import { EventName } from "../../components/EventDefinition";
-import { ObjectType } from "../../shared/object-type";
+import { EventName } from "./EventDefinition";
+import { ObjectType } from "../../dependencyInjection";
 import { ComponentTypeCollection } from "./ComponentTypeCollection";
 
 export function EventHandler(selector: string, event: EventName | string): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void {

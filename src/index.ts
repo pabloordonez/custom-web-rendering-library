@@ -1,10 +1,11 @@
-import styles from "./index.module.scss";
-import { ComponentTypeCollection } from "./library/decorators/component/ComponentTypeCollection";
-import html from "./library/interpolation/html";
 export { TestComponent } from "./components/TestComponent";
-export { ToDoListComponent, ToDoItemComponent} from "./components/TodoList";
+export { ToDoListComponent, ToDoItemComponent } from "./components/TodoList";
+import { ComponentTypeCollection } from "./library/decorators/components";
+import { html } from "./library/interpolation";
+import styles from "./index.module.scss";
 
 ComponentTypeCollection.globalInstance.defineAll();
+
 document.getElementById("root").innerHTML = html`
     <div class="${styles.main}">Test Page</div>
     <todo-list></todo-list>

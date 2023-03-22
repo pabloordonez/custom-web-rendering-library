@@ -82,7 +82,10 @@ const config = {
         ]
     },
     resolve: {
-        extensions: [".ts", ".js", ".css", ".scss"]
+        extensions: [".ts", ".js", ".css", ".scss"],
+        alias: {
+            "library": path.join(__dirname, "src", "library")
+        }
     }
 };
 

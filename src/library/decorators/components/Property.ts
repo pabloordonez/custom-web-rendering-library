@@ -1,4 +1,4 @@
-import { ObjectType } from "../../shared/object-type";
+import { ObjectType } from "../../dependencyInjection";
 import { ComponentTypeCollection } from "./ComponentTypeCollection";
 
 type DecoratorResult = (target: any, propertyKey: string) => void;

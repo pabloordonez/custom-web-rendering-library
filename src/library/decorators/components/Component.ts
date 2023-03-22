@@ -1,6 +1,6 @@
 import { IComponentDescriptor } from "./IComponentDescriptor";
 import { ComponentTypeCollection } from "./ComponentTypeCollection";
-import { ObjectType } from "../../shared/object-type";
+import { ObjectType } from "../../dependencyInjection";
 
 export function Component(descriptor: IComponentDescriptor): <T>(controller: ObjectType<T>) => void {
     if (!descriptor) throw new Error("The component descriptor is mandatory.");

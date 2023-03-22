@@ -1,5 +1,5 @@
-import { EventDefinition, EventName } from "../../components/EventDefinition";
-import { getObjectTypeName, ObjectType } from "../../shared/object-type";
+import { EventDefinition, EventName } from "./EventDefinition";
+import { ObjectType, getObjectTypeName } from "../../dependencyInjection";
 import { IComponentDescriptor } from "./IComponentDescriptor";
 
 export class ComponentType {
