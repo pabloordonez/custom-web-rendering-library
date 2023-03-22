@@ -1,8 +1,13 @@
+import { DependencyContainer, DependencyCollection } from "library/dependencyInjection";
 import { EventListenerInstance, ComponentTypeCollection } from "../decorators/components";
 
 type RefMap = { [key: string]: Element };
 
+const globalContainer = DependencyCollection.globalCollection.buildContainer(false);
+
 export class ComponentBase extends HTMLElement {
+    private _dependencyContainer: DependencyContainer;
+
     private _refs: { [key: string]: Element };
 
     private _eventListenerInstances: EventListenerInstance[];
@@ -11,10 +16,15 @@ export class ComponentBase extends HTMLElement {
         return this._refs;
     }
 
+    protected get dependencyContainer(): DependencyContainer {
+        return this._dependencyContainer;
+    }
+
     constructor() {
         super();
         this._refs = {};
         this._eventListenerInstances = [];
+        this.initializeDependencyContainer();
     }
 
     connectedCallback(): void {
@@ -60,6 +70,18 @@ export class ComponentBase extends HTMLElement {
     }
 
     protected afterRender(): void {}
+
+    private initializeDependencyContainer(): void {
+        const derivedType = this.constructor as any;
+        let dependencyContainer: DependencyContainer = undefined;
+
+        if (derivedType.useParentDependencyContainer) {
+            const parentContainer = (this.parentNode as any).dependencyContainer as DependencyContainer;
+            if (parentContainer) dependencyContainer = derivedType.scopedDependencyContainer ? parentContainer.createScopedInjector() : parentContainer;
+        }
+
+        this._dependencyContainer = dependencyContainer ?? DependencyCollection.globalCollection.buildContainer();
+    }
 
     private processReferences(): void {
         const elements = this.querySelectorAll("[ref]");
