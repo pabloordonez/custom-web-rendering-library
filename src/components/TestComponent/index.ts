@@ -1,8 +1,9 @@
 import { Component } from "../../library/decorators/component/Component";
-import { Property } from "../../library/decorators/property/Property";
+import { Property } from "../../library/decorators/component/Property";
 import { ComponentBase } from "../../library/components/ComponentBase";
 import html from "../../library/interpolation/html";
 import styles from "./TestComponent.module.scss";
+import { EventHandler } from "../../library/decorators/component/EventHandler";
 
 @Component({ selector: "test-component" })
 export class TestComponent extends ComponentBase {
@@ -14,23 +15,21 @@ export class TestComponent extends ComponentBase {
 
     constructor() {
         super();
-        this.initialize();
     }
 
-    private initialize(): void {
-        this.registerEvent(`.${styles.plus}`, "click", e => {
-            this.age++;
-            this.invalidate();
-        });
+    @EventHandler(`.${styles.plus}`, "click")
+    onPlusClick(): void {
+        this.age++;
+        this.invalidate();
+    }
 
-        this.registerEvent(`.${styles.minus}`, "click", e => {
-            this.age--;
-            this.invalidate();
-        });
+    @EventHandler(`.${styles.minus}`, "click")
+    onMinusClick(): void {
+        this.age--;
+        this.invalidate();
     }
 
     protected render(): string {
-        console.log("re-render");
         return html`<div class=${styles.container}>
             <h1>Test Component</h1>
             <div class=${styles.field}>

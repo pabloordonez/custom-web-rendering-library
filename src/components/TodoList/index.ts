@@ -1,5 +1,6 @@
 import { ComponentBase } from "../../library/components/ComponentBase";
 import { Component } from "../../library/decorators/component/Component";
+import { EventHandler } from "../../library/decorators/component/EventHandler";
 import html from "../../library/interpolation/html";
 import { ToDoItem, ToDoItemComponent } from "./TodoItem";
 import styles from "./TodoList.module.scss";
@@ -7,25 +8,22 @@ export { ToDoItemComponent } from "./TodoItem";
 
 @Component({ selector: "todo-list" })
 export class ToDoListComponent extends ComponentBase {
-    private items: ToDoItem[];
+    private readonly items: ToDoItem[];
 
     constructor() {
         super();
-        this.initialize();
-    }
-
-    private initialize(): void {
         this.items = [];
-        this.registerEvent("#addButton", "click", () => this.onAddItemClick());
-        this.registerEvent("todo-item", "onRemove", (e: CustomEvent<ToDoItemComponent>) => this.onRemoveItem(e.detail));
     }
 
-    private onAddItemClick(): void {
+    @EventHandler(`#addButton`, "click")
+    onAddItemClick(): void {
         this.items.push(new ToDoItem(this.items.length + 1, ""));
         this.invalidate();
     }
 
-    private onRemoveItem(item: ToDoItemComponent): void {
+    @EventHandler(`todo-item`, "onRemove")
+    onRemoveItem(e: CustomEvent<ToDoItemComponent>): void {
+        const item = e.detail;
         this.items.splice(this.items.indexOf(item.item), 1);
         this.items.forEach((x, i) => (x.index = i + 1));
         this.invalidate();

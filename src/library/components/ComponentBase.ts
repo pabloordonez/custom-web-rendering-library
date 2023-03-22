@@ -1,11 +1,12 @@
-import { Event, EventListener, EventName } from "./EventListener";
+import { ComponentTypeCollection } from "../decorators/component/ComponentTypeCollection";
+import { EventListenerInstance } from "./EventListenerInstance";
 
 type RefMap = { [key: string]: Element };
 
 export class ComponentBase extends HTMLElement {
-    private _listeners: Array<EventListener>;
-
     private _refs: { [key: string]: Element };
+
+    private _eventListenerInstances: EventListenerInstance[];
 
     protected get refs(): RefMap {
         return this._refs;
@@ -13,8 +14,8 @@ export class ComponentBase extends HTMLElement {
 
     constructor() {
         super();
-        this._listeners = [];
         this._refs = {};
+        this._eventListenerInstances = [];
     }
 
     connectedCallback(): void {
@@ -24,37 +25,10 @@ export class ComponentBase extends HTMLElement {
 
     disconnectedCallback(): void {
         this.onRemoved();
-        this.unregisterAll();
-    }
-
-    protected onCreated(): void {}
-
-    protected onRemoved(): void {}
-
-    protected beforeRender(): void {}
-
-    protected render(): string {
-        return "";
-    }
-
-    protected afterRender(): void {}
-
-    protected registerEvent(selector: string, event: EventName | string, func: Event): EventListener {
-        const eventListener = new EventListener(this, selector, event, func);
-        this._listeners.push(eventListener);
-        return eventListener;
-    }
-
-    protected unregisterEvent(eventListener: EventListener): void {
-        this._listeners.splice(this._listeners.indexOf(eventListener), 1);
-    }
-
-    protected unregisterAll(): void {
-        this._listeners.forEach(x => this.unregisterEvent(x));
+        this.disconnectEvents();
     }
 
     protected attributeChangedCallback(name: string, oldValue: any, newValue: any) {
-        console.log(`Property ${name} changed [${oldValue} -> ${newValue}]`);
         (this as any)[name] = newValue;
         this.invalidate();
     }
@@ -69,7 +43,7 @@ export class ComponentBase extends HTMLElement {
 
     protected invalidate(): void {
         // 1. disconnect all listeners.
-        this._listeners.forEach(x => x.disconnect());
+        this.disconnectEvents();
 
         // 2. render the component again.
         this.beforeRender();
@@ -78,8 +52,28 @@ export class ComponentBase extends HTMLElement {
         this.afterRender();
 
         // 3. try to connect listeners again.
-        this._listeners.forEach(x => {
-            if (!x.connect()) console.log(`Event ${x.event} for selector ${x.selector} not connected.`);
-        });
+        this.connectEvents();
+    }
+
+    protected onCreated(): void {}
+
+    protected onRemoved(): void {}
+
+    protected beforeRender(): void {}
+
+    protected render(): string {
+        return "";
+    }
+
+    protected afterRender(): void {}
+
+    private connectEvents(): void {
+        const componentType = ComponentTypeCollection.globalInstance.get(this.constructor as any);
+        const listeners =  componentType.events;
+        this._eventListenerInstances = listeners.map(x => x.connect(this)).reduce((p, c) => p.concat(c));
+    }
+
+    private disconnectEvents(): void {
+        this._eventListenerInstances.forEach(x => x.disconnect());
     }
 }

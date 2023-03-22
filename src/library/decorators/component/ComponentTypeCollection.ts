@@ -1,6 +1,5 @@
 import { ComponentType } from "./ComponentType";
-import { PropertyTypeCollection } from "../property/PropertyTypeCollection";
-import { ObjectType } from "../../shared/object-type";
+import { getObjectTypeName, ObjectType } from "../../shared/object-type";
 
 export class ComponentTypeCollection {
     private static _globalInstance: ComponentTypeCollection;
@@ -17,16 +16,9 @@ export class ComponentTypeCollection {
         this._registeredTypes = new Map<ObjectType, ComponentType>();
     }
 
-    register(componentType: ComponentType): void {
-        if (this._registeredTypes.has(componentType.type)) throw new Error(`The component ${getObjectTypeName(componentType.type)} is already registered.`);
-
-        this._registeredTypes.set(componentType.type, componentType);
-    }
-
     get(component: ObjectType): ComponentType {
-        const instance = this._registeredTypes.get(component);
-        if (!instance) throw new Error(`The component ${getObjectTypeName(component)} is not registered.`);
-        return instance;
+        if (!this._registeredTypes.has(component)) this._registeredTypes.set(component, new ComponentType(component));
+        return this._registeredTypes.get(component);
     }
 
     contains(component: ObjectType): boolean {
@@ -38,13 +30,9 @@ export class ComponentTypeCollection {
     }
 
     defineAll(): void {
-        for(const component of this._registeredTypes.values()) {
-            (component.type as any).observedAttributes = PropertyTypeCollection.globalInstance.getForComponent(component.name).map(x => x.propertyName);
+        for (const component of this._registeredTypes.values()) {
+            (component.type as any).observedAttributes = component.properties;
             customElements.define(component.descriptor.selector, component.type, { extends: component.descriptor.extends });
         }
     }
 }
-function getObjectTypeName(component: ObjectType<any>) {
-    throw new Error("Function not implemented.");
-}
-
