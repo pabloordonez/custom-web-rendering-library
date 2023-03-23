@@ -1,19 +1,22 @@
 {
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "noImplicitAny": true,
-        "module": "ES2015",
+        "moduleResolution": "node",
+        "module": "ES6",
         "target": "ES2015",
         "lib": ["ES2015", "DOM"],
-        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "allowJs": true,
+        "declaration": true,
+        "sourceMap": true,
         "baseUrl": "./src/",
+        "outDir": "./dist/esm/",
         "typeRoots": ["./node_modules/@types", "./node_modules/@miracledevs", "./src/typings"],
         "paths": {
-            "components/*": ["./components/*" ],
-            "library/*": ["./library/*"],
+            "components/*": ["./components/*"],
+            "library/*": ["./library/*"]
         }
     },
     "include": ["./src/**/*.ts"]

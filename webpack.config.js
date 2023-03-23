@@ -11,12 +11,8 @@ const config = {
     entry: "./src/index.ts",
     output: {
         filename: "library.js",
-        path: path.resolve(__dirname, "dist"),
-        globalObject: "this",
-        library: {
-            name: "library",
-            type: "umd"
-        }
+        path: path.resolve(__dirname, "dist/bundle/"),
+        globalObject: "this"
     },
     devServer: {
         static: {
@@ -37,7 +33,12 @@ const config = {
             {
                 test: /\.(ts|js)$/i,
                 loader: "ts-loader",
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                options: {
+                    compilerOptions: {
+                        documentation: false
+                    }
+                }
             },
             {
                 test: /\.s[ac]ss$/i,
@@ -84,8 +85,8 @@ const config = {
     resolve: {
         extensions: [".ts", ".js", ".css", ".scss"],
         alias: {
-            "components": path.join(__dirname, "src", "components"),
-            "library": path.join(__dirname, "src", "library")
+            components: path.join(__dirname, "src", "components"),
+            library: path.join(__dirname, "src", "library")
         }
     }
 };

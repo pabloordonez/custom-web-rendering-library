@@ -1,6 +1,7 @@
 export { TestComponent } from "components/TestComponent";
 export { ToDoListComponent, ToDoItemComponent } from "components/TodoList";
 export { PerformantToDoListComponent } from "components/PerformantTodoList";
+
 import { ComponentTypeCollection } from "library/decorators/components";
 import { html } from "./library/interpolation";
 import styles from "./index.module.scss";
