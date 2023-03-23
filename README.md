@@ -7,8 +7,8 @@ The framework must allow the following features:
 
 - [X] Register custom elements.
 - [X] Render web components (preferably without shadow dom).
-- [ ] Work as a library for other web-based projects (Users should be able to include script and import modules in their own files).
-- [ ] Emit declaration file? (Jury is still out)
+- [X] Work as a library for other web-based projects (Users should be able to include script and import modules in their own files).
+- [X] Emit declaration file? (Jury is still out)
 - [X] Use sass instead of css.
 - [X] Use css/sass modules instead of plain files.
 - [X] Avoid async load of styles.
