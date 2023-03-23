@@ -72,15 +72,15 @@ export class ComponentBase extends HTMLElement {
     protected afterRender(): void {}
 
     private initializeDependencyContainer(): void {
-        const derivedType = this.constructor as any;
+        const componentType = ComponentTypeCollection.globalInstance.get(this.constructor as any);
         let dependencyContainer: DependencyContainer = undefined;
 
-        if (derivedType.useParentDependencyContainer) {
+        if (componentType.descriptor.useParentDI) {
             const parentContainer = (this.parentNode as any).dependencyContainer as DependencyContainer;
-            if (parentContainer) dependencyContainer = derivedType.scopedDependencyContainer ? parentContainer.createScopedInjector() : parentContainer;
+            if (parentContainer) dependencyContainer = componentType.descriptor.useScopedDI ? parentContainer.createScopedInjector() : parentContainer;
         }
 
-        this._dependencyContainer = dependencyContainer ?? DependencyCollection.globalCollection.buildContainer();
+        this._dependencyContainer = dependencyContainer ?? globalContainer;
     }
 
     private processReferences(): void {
