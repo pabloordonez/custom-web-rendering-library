@@ -23,6 +23,7 @@ The framework must allow the following features:
 - [ ] Add Jest unit tests.
 - [ ] Add Playwright e2e tests (cross-browser testing).
 - [ ] Add navigation support, hash and html5 enabled routing.
+- [X] Support for Array mappers in the html function.
 
 ## Scripts
 

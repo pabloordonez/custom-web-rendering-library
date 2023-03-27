@@ -1,8 +1,8 @@
-export { Component } from "./Component";
-export { ComponentType } from "./ComponentType";
-export { ComponentTypeCollection } from "./ComponentTypeCollection";
-export { EventName, EventDefinition } from "./EventDefinition";
-export { EventHandler } from "./EventHandler";
-export { EventListenerInstance } from "./EventListenerInstance";
-export { IComponentDescriptor } from "./IComponentDescriptor";
-export { Property } from "./Property";
+export * from "./Component";
+export * from "./ComponentType";
+export * from "./ComponentTypeCollection";
+export * from "./EventDefinition";
+export * from "./EventHandler";
+export * from "./EventListenerInstance";
+export * from "./IComponentDescriptor";
+export * from "./Property";

@@ -1,6 +1,6 @@
-export { TestComponent } from "components/TestComponent";
-export { ToDoListComponent, ToDoItemComponent } from "components/TodoList";
-export { PerformantToDoListComponent } from "components/PerformantTodoList";
+export * from "components/TestComponent";
+export * from "components/TodoList";
+export * from "components/PerformantTodoList";
 
 import { ComponentTypeCollection } from "library/decorators/components";
 import { html } from "./library/interpolation";
