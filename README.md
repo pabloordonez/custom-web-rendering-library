@@ -5,27 +5,31 @@ The framework must allow the following features:
 
 ## Primary Requirements
 
-- [X] Register custom elements.
-- [X] Render web components (preferably without shadow dom).
-- [X] Work as a library for other web-based projects (Users should be able to include script and import modules in their own files).
-- [X] Emit declaration file? (Jury is still out)
-- [X] Use sass instead of css.
-- [X] Use css/sass modules instead of plain files.
-- [X] Avoid async load of styles.
-- [X] Avoid embedded styles.
-- [X] Use typescript instead of javascript.
+- [x] Register custom elements.
+- [x] Render web components (preferably without shadow dom).
+- [x] Work as a library for other web-based projects (Users should be able to include script and import modules in their own files).
+- [x] Emit declaration file? (Jury is still out)
+- [x] Use sass instead of css.
+- [x] Use css/sass modules instead of plain files.
+- [x] Avoid async load of styles.
+- [x] Avoid embedded styles.
+- [x] Use typescript instead of javascript.
 
 ## Secondary Requirements
 
-- [X] Take advantage of typescript features like decorators.
+- [x] Take advantage of typescript features like decorators.
 - [ ] Support from the get-go for transition animations on connection and disconnection from the dom.
-- [X] Support for Scoped and parental inheritance of DI Containers.
+- [x] Support for Scoped and parental inheritance of DI Containers.
 - [ ] Add Jest unit tests.
 - [ ] Add Playwright e2e tests (cross-browser testing).
 - [ ] Add navigation support, hash and html5 enabled routing.
-- [X] Support for Array mappers in the html function.
-- [X] Add support for typed queries.
-- [X] Add support for event handlers.
+- [x] Support for Array mappers in the html function.
+- [x] Add support for typed queries.
+- [x] Add support for event handlers.
+
+## VSCode support
+
+To better support the templates, you can install the [Lit Plugin](https://marketplace.visualstudio.com/items?itemName=runem.lit-plugin) that will add syntax highlighting for html template literals.
 
 ## Scripts
 
