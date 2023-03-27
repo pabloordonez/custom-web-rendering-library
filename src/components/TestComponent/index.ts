@@ -2,7 +2,6 @@ import { Component, Property, EventHandler, Query } from "library/decorators/com
 import { ComponentBase } from "library/components";
 import { html } from "library/interpolation";
 import styles from "./TestComponent.module.scss";
-import { TestService } from "library/services/TestService";
 
 @Component({ tag: "test-component" })
 export class TestComponent extends ComponentBase {
@@ -17,7 +16,6 @@ export class TestComponent extends ComponentBase {
 
     constructor() {
         super();
-        this.dependencyContainer.resolve(TestService).test();
     }
 
     @EventHandler("click")
