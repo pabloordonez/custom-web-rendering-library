@@ -24,6 +24,8 @@ The framework must allow the following features:
 - [ ] Add Playwright e2e tests (cross-browser testing).
 - [ ] Add navigation support, hash and html5 enabled routing.
 - [X] Support for Array mappers in the html function.
+- [X] Add support for typed queries.
+- [X] Add support for event handlers.
 
 ## Scripts
 
