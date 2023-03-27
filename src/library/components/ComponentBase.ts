@@ -87,10 +87,10 @@ export class ComponentBase extends HTMLElement {
             const descriptor = queries.get(key);
 
             if (descriptor.multiple) {
-                const result = document.querySelectorAll(descriptor.selector);
+                const result = this.querySelectorAll(descriptor.selector);
                 (this as any)[key] = result ? Array.from(result) : undefined;
             } else {
-                const result = document.querySelector(descriptor.selector);
+                const result = this.querySelector(descriptor.selector);
                 (this as any)[key] = result ? result : undefined;
             }
         }
