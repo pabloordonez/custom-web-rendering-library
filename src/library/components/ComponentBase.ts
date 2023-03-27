@@ -1,30 +1,28 @@
 import { DependencyContainer, DependencyCollection } from "library/dependencyInjection";
-import { EventListenerInstance, ComponentTypeCollection } from "../decorators/components";
-
-type RefMap = { [key: string]: Element };
+import { EventListenerInstance, ComponentTypeCollection, ComponentType } from "../decorators/components";
 
 const globalContainer = DependencyCollection.globalCollection.buildContainer(false);
 
 export class ComponentBase extends HTMLElement {
-    private _dependencyContainer: DependencyContainer;
+    private readonly _componentType: ComponentType;
 
-    private _refs: { [key: string]: Element };
+    private readonly _dependencyContainer: DependencyContainer;
 
-    private _eventListenerInstances: EventListenerInstance[];
-
-    protected get refs(): RefMap {
-        return this._refs;
-    }
+    private readonly _eventListenerInstances: EventListenerInstance[];
 
     protected get dependencyContainer(): DependencyContainer {
         return this._dependencyContainer;
     }
 
+    protected get componentType(): ComponentType {
+        return this._componentType;
+    }
+
     constructor() {
         super();
-        this._refs = {};
+        this._componentType = ComponentTypeCollection.globalInstance.get(this.constructor as any);
         this._eventListenerInstances = [];
-        this.initializeDependencyContainer();
+        this._dependencyContainer = this.getDependencyContainer();
     }
 
     connectedCallback(): void {
@@ -47,7 +45,7 @@ export class ComponentBase extends HTMLElement {
         // 2. render the component again.
         this.beforeRender();
         if (reRender) this.innerHTML = this.render();
-        this.processReferences();
+        this.executeQueries();
         this.afterRender();
 
         // 3. try to connect listeners again.
@@ -71,33 +69,41 @@ export class ComponentBase extends HTMLElement {
 
     protected afterRender(): void {}
 
-    private initializeDependencyContainer(): void {
-        const componentType = ComponentTypeCollection.globalInstance.get(this.constructor as any);
+    private getDependencyContainer(): DependencyContainer {
         let dependencyContainer: DependencyContainer = undefined;
 
-        if (componentType.descriptor.useParentDI) {
+        if (this.componentType.descriptor.useParentDI) {
             const parentContainer = (this.parentNode as any).dependencyContainer as DependencyContainer;
-            if (parentContainer) dependencyContainer = componentType.descriptor.useScopedDI ? parentContainer.createScopedInjector() : parentContainer;
+            if (parentContainer) dependencyContainer = this.componentType.descriptor.useScopedDI ? parentContainer.createScopedInjector() : parentContainer;
         }
 
-        this._dependencyContainer = dependencyContainer ?? globalContainer;
+        return dependencyContainer ?? globalContainer;
     }
 
-    private processReferences(): void {
-        const elements = this.querySelectorAll("[ref]");
+    private executeQueries(): void {
+        const queries = this.componentType.queries;
 
-        elements.forEach(element => {
-            this.refs[element.getAttribute("ref")] = element;
-        });
+        for (const key of queries.keys()) {
+            const descriptor = queries.get(key);
+
+            if (descriptor.multiple) {
+                const result = document.querySelectorAll(descriptor.selector);
+                (this as any)[key] = result ? Array.from(result) : undefined;
+            } else {
+                const result = document.querySelector(descriptor.selector);
+                (this as any)[key] = result ? result : undefined;
+            }
+        }
     }
 
     private connectEvents(): void {
-        const componentType = ComponentTypeCollection.globalInstance.get(this.constructor as any);
-        const listeners = componentType.events;
-        this._eventListenerInstances = listeners.map(x => x.connect(this)).reduce((p, c) => p.concat(c));
+        const listeners = this.componentType.events;
+        this._eventListenerInstances.splice(0);
+        listeners.map(x => x.connect(this)).forEach(x => this._eventListenerInstances.push(...x));
     }
 
     private disconnectEvents(): void {
         this._eventListenerInstances.forEach(x => x.disconnect());
+        this._eventListenerInstances.splice(0);
     }
 }

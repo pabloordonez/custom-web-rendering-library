@@ -32,7 +32,7 @@ export class ComponentTypeCollection {
     defineAll(): void {
         for (const component of this._registeredTypes.values()) {
             (component.type as any).observedAttributes = component.properties;
-            customElements.define(component.descriptor.selector, component.type, { extends: component.descriptor.extends });
+            customElements.define(component.descriptor.tag, component.type, { extends: component.descriptor.extends });
         }
     }
 }

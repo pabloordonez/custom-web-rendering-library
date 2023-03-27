@@ -1,5 +1,5 @@
 export interface IComponentDescriptor {
-    selector: string;
+    tag: string;
     extends?: string;
     useParentDI?: boolean;
     useScopedDI?: boolean;

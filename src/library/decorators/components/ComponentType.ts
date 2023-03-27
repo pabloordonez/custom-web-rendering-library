@@ -1,23 +1,30 @@
 import { EventDefinition, EventName } from "./EventDefinition";
 import { ObjectType, getObjectTypeName } from "../../dependencyInjection";
 import { IComponentDescriptor } from "./IComponentDescriptor";
+import { IQueryDescriptor } from "./IQueryDescriptor";
 
 export class ComponentType {
     private _properties: string[];
 
     private _events: EventDefinition[];
 
+    private _queries: Map<string, IQueryDescriptor>;
+
     private _descriptor: IComponentDescriptor;
 
-    public get properties(): string[] {
-        return [...this._properties];
+    public get properties(): ReadonlyArray<string> {
+        return this._properties;
     }
 
-    public get events(): EventDefinition[] {
-        return [...this._events];
+    public get events(): ReadonlyArray<EventDefinition> {
+        return this._events;
     }
 
-    public get descriptor(): IComponentDescriptor {
+    public get queries(): ReadonlyMap<string, IQueryDescriptor> {
+        return this._queries;
+    }
+
+    public get descriptor(): Readonly<IComponentDescriptor> {
         return this._descriptor;
     }
 
@@ -26,7 +33,8 @@ export class ComponentType {
     constructor(public readonly type: ObjectType) {
         this._properties = [];
         this._events = [];
-        this._descriptor = { selector: "" };
+        this._queries = new Map<string, IQueryDescriptor>();
+        this._descriptor = { tag: "" };
         this.name = getObjectTypeName(type);
         this.type = type;
     }
@@ -39,7 +47,11 @@ export class ComponentType {
         this._properties.push(property);
     }
 
-    registerEvent(selector: string, event: EventName | string, listener: EventListener): void {
-        this._events.push(new EventDefinition(selector, event, listener));
+    registerEvent(event: EventName | string, selector: string, listener: EventListener): void {
+        this._events.push(new EventDefinition(event, selector, listener));
+    }
+
+    registerQuery(name: string, descriptor: IQueryDescriptor): void {
+        this._queries.set(name, descriptor);
     }
 }

@@ -3,10 +3,10 @@ import { EventListenerInstance } from "./EventListenerInstance";
 export type EventName = keyof HTMLElementEventMap;
 
 export class EventDefinition {
-    constructor(public readonly selector: string, public readonly event: EventName | string, public readonly func: EventListener) {}
+    constructor(public readonly event: EventName | string, public readonly selector: string, public readonly func: EventListener) {}
 
     connect(element: HTMLElement): EventListenerInstance[] {
-        const children = element.querySelectorAll(this.selector);
+        const children = this.selector ? element.querySelectorAll(this.selector) : [element];
         const eventListeners: EventListenerInstance[] = [];
 
         if (!children) eventListeners;

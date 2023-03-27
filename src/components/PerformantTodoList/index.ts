@@ -1,57 +1,55 @@
 import { ToDoItem, ToDoItemComponent } from "components/TodoList/TodoItem";
 import { ComponentBase } from "library/components";
-import { Component, EventHandler } from "library/decorators/components";
+import { Component, EventHandler, Query } from "library/decorators/components";
 import { html } from "library/interpolation";
 import styles from "./PerformantTodoList.module.scss";
 
-@Component({ selector: "perf-todo-list" })
+@Component({ tag: "perf-todo-list" })
 export class PerformantToDoListComponent extends ComponentBase {
-    private readonly items: ToDoItemComponent[];
+    @Query("#itemViews")
+    private readonly itemViews: HTMLDivElement;
+
+    @Query("#counter")
+    private readonly counter: HTMLSpanElement;
 
     constructor() {
         super();
-        this.items = [];
     }
 
-    @EventHandler(`#addButton`, "click")
+    @EventHandler("click", `#addButton`)
     onAddItemClick(): void {
+        if (!this.itemViews) return;
         const view = new ToDoItemComponent();
-        view.item = new ToDoItem(this.items.length + 1, "");
-        this.items.push(view);
+        view.item = new ToDoItem(this.itemViews.children.length + 1, "");
+        this.itemViews.appendChild(view);
+        this.updateCounter();
         this.invalidate(false);
     }
 
-    @EventHandler(`todo-item`, "onRemove")
+    @EventHandler("onRemove", `todo-item`)
     onRemoveItem(e: CustomEvent<ToDoItemComponent>): void {
         const item = e.detail;
-        const itemViews = this.refs.itemViews as HTMLDivElement;
-
-        itemViews?.removeChild(item);
-        this.items.splice(this.items.indexOf(item), 1);
-        this.items.forEach((x, i) => {
+        this.itemViews?.removeChild(item);
+        this.itemViews.childNodes.forEach((x: ToDoItemComponent, i: number) => {
             x.item.index = i + 1;
             x.invalidate();
         });
-
+        this.updateCounter();
         this.invalidate(false);
+    }
+
+    private updateCounter(): void {
+        if (!this.counter) return;
+        this.counter.innerText = this.itemViews.children.length.toString();
     }
 
     protected render(): string {
         return html`<div class="${styles.container}">
-            <h2>Faster TODO List (${this.items.length})</h2>
-            <div class="${styles.items}" ref="itemViews"></div>
+            <h2>Faster TODO List (<span id="counter">0</span>)</h2>
+            <div class="${styles.items}" id="itemViews"></div>
             <div>
                 <button id="addButton">Add Item</button>
             </div>
         </div>`;
-    }
-
-    protected afterRender(): void {
-        const itemViews = this.refs.itemViews as HTMLDivElement;
-        if (!itemViews) return;
-        for (const view of this.items) {
-            if (view.isConnected) continue;
-            itemViews.appendChild(view);
-        }
     }
 }

@@ -7,7 +7,7 @@ export class ToDoItem {
     constructor(public index: number, public message: string) {}
 }
 
-@Component({ selector: "todo-item" })
+@Component({ tag: "todo-item" })
 export class ToDoItemComponent extends ComponentBase {
     private _item?: ToDoItem;
 
@@ -27,12 +27,12 @@ export class ToDoItemComponent extends ComponentBase {
         this._event = new CustomEvent<ToDoItemComponent>("onRemove", { bubbles: true, cancelable: false, detail: this });
     }
 
-    @EventHandler(`.message`, "change")
+    @EventHandler("change", `.message`)
     onValueChange(e: InputEvent): void {
         this.item.message = (e.currentTarget as HTMLInputElement).value;
     }
 
-    @EventHandler(`#removeButton`, "click")
+    @EventHandler("click", `#removeButton`)
     onRemoveItemClick(): void {
         this.dispatchEvent(this._event);
     }
