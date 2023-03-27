@@ -1,6 +1,7 @@
 export * from "components/TestComponent";
 export * from "components/TodoList";
 export * from "components/PerformantTodoList";
+export * from "components/InnerContentTest";
 
 import { ComponentTypeCollection } from "library/decorators/components";
 import { html } from "./library/interpolation";
@@ -14,5 +15,9 @@ document.getElementById("root").innerHTML = html`
         <todo-list></todo-list>
         <perf-todo-list></perf-todo-list>
         <test-component name="Peter O'Tool" age="16"></test-component>
+        <inner-content-test>
+            <span id="name">Outside</span>
+            <span id="description">This content is being sent from outside.</span>
+        </inner-content-test>
     </main>
 `;
