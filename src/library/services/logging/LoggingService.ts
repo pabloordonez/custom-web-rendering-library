@@ -17,7 +17,7 @@ export default class LoggingService implements ILogProvider {
     private provider: ILogProvider;
 
     constructor() {
-        this.minimumLogLevel = parseInt(process.env.REACT_APP_MINIMUM_LOG_LEVEL ?? "0");
+        this.minimumLogLevel = LogType.Trace;
         this.provider = new ConsoleLogProvider();
     }
 
