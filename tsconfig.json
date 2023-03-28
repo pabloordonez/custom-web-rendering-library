@@ -9,14 +9,11 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "allowJs": true,
-        "declaration": true,
-        "sourceMap": true,
         "baseUrl": "./src/",
-        "outDir": "./dist/esm/",
-        "typeRoots": ["./node_modules/@types", "./node_modules/@miracledevs", "./src/typings"],
         "paths": {
             "components/*": ["./components/*"],
-            "library/*": ["./library/*"]
+            "library/*": ["./library/*"],
+            "*": ["src/typings/*"]
         }
     },
     "include": ["./src/**/*.ts"]

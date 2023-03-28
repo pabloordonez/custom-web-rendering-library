@@ -23,10 +23,10 @@
         "start": "npm run serve",
         "build": "npm run clean && npm run build:esm && npm run build:bundle",
         "clean": "rm -rf ./dist/bundle ./dist/esm",
-        "build:esm": "tsc",
-        "build:bundle": "webpack --mode=production --node-env=production",
-        "watch": "webpack --watch",
-        "serve": "webpack serve",
+        "build:esm": "webpack --mode=production --node-env=production --env mode=esm",
+        "build:bundle": "webpack --mode=production --node-env=production --env mode=bundle",
+        "watch": "webpack --watch --env mode=bundle",
+        "serve": "webpack serve --env mode=bundle",
         "format": "prettier --write ."
     },
     "dependencies": {
