@@ -4,6 +4,7 @@ module.exports = (env, argv) => {
     const path = require("path");
     const HtmlWebpackPlugin = require("html-webpack-plugin");
     const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+    const NpmDtsPlugin = require("npm-dts-webpack-plugin");
 
     const isBundle = env.mode === "bundle";
     const isProduction = process.env.NODE_ENV == "production";
@@ -106,6 +107,7 @@ module.exports = (env, argv) => {
         config.experiments = {
             outputModule: true
         };
+        config.plugins.push(new NpmDtsPlugin({ entry: "./src/index.d.ts", output: "./dist/esm/library.d.ts" }));
     }
 
     return config;
