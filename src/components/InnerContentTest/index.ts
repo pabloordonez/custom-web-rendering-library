@@ -5,7 +5,6 @@ import styles from "./InnerContentTest.module.scss";
 
 @Component({ tag: "inner-content-test" })
 export class InnerContentTestComponent extends ComponentBase {
-
     private externalContent: string;
 
     @Query("#name")

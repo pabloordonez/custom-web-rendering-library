@@ -7,7 +7,7 @@ export enum LogType {
     Debug,
     Info,
     Warning,
-    Error,
+    Error
 }
 
 @Injectable({ lifeTime: DependencyLifeTime.Singleton })

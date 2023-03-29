@@ -21,7 +21,7 @@ export class TestComponent extends ComponentBase {
     @EventHandler("click")
     onClick(): void {
         if (!this.container) return;
-        this.container.style.backgroundColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+        this.container.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
     }
 
     @EventHandler("click", `.${styles.plus}`)

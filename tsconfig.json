@@ -13,7 +13,7 @@
         "paths": {
             "components/*": ["./components/*"],
             "library/*": ["./library/*"],
-            "*": ["./typings/*"],
+            "*": ["./typings/*"]
         }
     },
     "include": ["./src/**/*.ts"]

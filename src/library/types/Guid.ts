@@ -24,20 +24,7 @@ export class Guid {
      */
     static new(): Guid {
         return new Guid(
-            (
-                Guid.s4() +
-                Guid.s4() +
-                "-" +
-                Guid.s4() +
-                "-4" +
-                Guid.s4().substr(0, 3) +
-                "-" +
-                Guid.s4() +
-                "-" +
-                Guid.s4() +
-                Guid.s4() +
-                Guid.s4()
-            ).toLowerCase()
+            (Guid.s4() + Guid.s4() + "-" + Guid.s4() + "-4" + Guid.s4().substr(0, 3) + "-" + Guid.s4() + "-" + Guid.s4() + Guid.s4() + Guid.s4()).toLowerCase()
         );
     }
 }
