@@ -2,6 +2,7 @@
 
 pushd ../../
 
+npm i
 npm run build
 
 cp ./dist/esm/library.js ./examples/esm/
