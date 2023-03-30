@@ -2,6 +2,7 @@ export * from "components/TestComponent";
 export * from "components/TodoList";
 export * from "components/PerformantTodoList";
 export * from "components/InnerContentTest";
+export * from "components/EditableComponent";
 
 import { ComponentTypeCollection } from "library/decorators/components";
 import { html } from "./library/interpolation";
@@ -20,6 +21,7 @@ if (process.env.REQUIRE_ROOT === "true") {
                 <span id="name">Outside</span>
                 <span id="description">This content is being sent from outside.</span>
             </inner-content-test>
+			<editable-component headertext="Editable component" paragraphtext="Edit me! You know you want it!"></editable-component>
         </main>
     `;
 }
