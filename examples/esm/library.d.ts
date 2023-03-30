@@ -328,7 +328,7 @@ declare module 'my-webpack-project/library/dependencyInjection/injectable' {
   import { ObjectType } from "my-webpack-project/library/dependencyInjection/object-type";
   import { DependencyLifeTime } from "my-webpack-project/library/dependencyInjection/dependency-life-time";
   import { DependencyCollection } from "my-webpack-project/library/dependencyInjection/dependency-collection";
-  import 'reflect-metadata';
+  import "reflect-metadata";
   export interface IInjectableDescriptor {
       lifeTime?: DependencyLifeTime;
       collection?: DependencyCollection;
@@ -342,7 +342,7 @@ declare module 'my-webpack-project/library/dependencyInjection/object-type' {
    * Copyright (c) 2017 Miracle Devs, Inc
    * Licensed under MIT (https://github.com/MiracleDevs/Paradigm.Web.DI/blob/master/LICENSE)
    */
-  export type ObjectType<T = any> = (new (...args: any[]) => T);
+  export type ObjectType<T = any> = new (...args: any[]) => T;
   export function getObjectTypeName<T = any>(objectType: ObjectType<T> | Function | any): string;
 
 }

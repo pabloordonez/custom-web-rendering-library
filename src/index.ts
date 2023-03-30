@@ -9,15 +9,17 @@ import styles from "./index.module.scss";
 
 ComponentTypeCollection.globalInstance.defineAll();
 
-document.getElementById("root").innerHTML = html`
-    <main class="${styles.main}">
-        <h1>Test Page</h1>
-        <todo-list></todo-list>
-        <perf-todo-list></perf-todo-list>
-        <test-component name="Peter O'Tool" age="16"></test-component>
-        <inner-content-test>
-            <span id="name">Outside</span>
-            <span id="description">This content is being sent from outside.</span>
-        </inner-content-test>
-    </main>
-`;
+if (process.env.REQUIRE_ROOT === "true") {
+    document.getElementById("root").innerHTML = html`
+        <main class="${styles.main}">
+            <h1>Test Page</h1>
+            <todo-list></todo-list>
+            <perf-todo-list></perf-todo-list>
+            <test-component name="Peter O'Tool" age="16"></test-component>
+            <inner-content-test>
+                <span id="name">Outside</span>
+                <span id="description">This content is being sent from outside.</span>
+            </inner-content-test>
+        </main>
+    `;
+}

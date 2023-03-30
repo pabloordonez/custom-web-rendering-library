@@ -1,18 +1,21 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-module.exports = (env, argv) => {
+module.exports = (env, _) => {
     const path = require("path");
     const HtmlWebpackPlugin = require("html-webpack-plugin");
     const MiniCssExtractPlugin = require("mini-css-extract-plugin");
     const NpmDtsPlugin = require("npm-dts-webpack-plugin");
+    const DotEnvPlugin = require("dotenv-webpack");
 
     const isBundle = env.mode === "bundle";
-    const isProduction = process.env.NODE_ENV == "production";
+    const environment = process.env.NODE_ENV ?? "development";
+    const isProduction = process.env.NODE_ENV === "production";
     const stylesHandler = MiniCssExtractPlugin.loader;
     const distPath = path.resolve(__dirname, isBundle ? "dist/bundle" : "dist/esm");
 
     console.info("============================================");
     console.info(`Starting build for: ${env.mode}`);
+    console.info(`Environment: ${environment}`);
     console.info(`Destination path: ${distPath}`);
     console.info("============================================");
 
@@ -23,7 +26,12 @@ module.exports = (env, argv) => {
             filename: "library.js",
             globalObject: "this"
         },
-        plugins: [new MiniCssExtractPlugin()],
+        plugins: [
+            new MiniCssExtractPlugin(),
+            new DotEnvPlugin({
+                path: path.resolve(__dirname,`./.env.${environment}`)
+            })
+        ],
         module: {
             rules: [
                 {
