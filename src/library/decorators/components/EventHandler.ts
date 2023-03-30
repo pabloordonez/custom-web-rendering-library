@@ -1,4 +1,4 @@
-import { EventName } from "./EventDefinition";
+import { EventName } from "./EventHandlerDefinition";
 import { ObjectType } from "../../dependencyInjection";
 import { ComponentTypeCollection } from "./ComponentTypeCollection";
 

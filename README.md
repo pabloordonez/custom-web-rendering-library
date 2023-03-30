@@ -26,6 +26,10 @@ The framework must allow the following features:
 -   [x] Support for Array mappers in the html function.
 -   [x] Add support for typed queries.
 -   [x] Add support for event handlers.
+-   [ ] Add support for message handlers.
+-   [ ] Review attributes / properties names using lowercase.
+-   [ ] Allow to add EventHandlers over special elements like document.
+
 
 ## VSCode support
 

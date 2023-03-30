@@ -1,12 +1,15 @@
-import { EventDefinition, EventName } from "./EventDefinition";
+import { EventHandlerDefinition, EventName } from "./EventHandlerDefinition";
 import { ObjectType, getObjectTypeName } from "../../dependencyInjection";
 import { IComponentDescriptor } from "./IComponentDescriptor";
 import { IQueryDescriptor } from "./IQueryDescriptor";
+import { IMessageHandlerDescriptor } from "./IMessageHandlerDescriptor";
 
 export class ComponentType {
     private _properties: string[];
 
-    private _events: EventDefinition[];
+    private _eventHandlers: EventHandlerDefinition[];
+
+    private _messageHandlers: IMessageHandlerDescriptor[];
 
     private _queries: Map<string, IQueryDescriptor>;
 
@@ -16,8 +19,12 @@ export class ComponentType {
         return this._properties;
     }
 
-    public get events(): ReadonlyArray<EventDefinition> {
-        return this._events;
+    public get eventHandlers(): ReadonlyArray<EventHandlerDefinition> {
+        return this._eventHandlers;
+    }
+
+    public get messageHandlers(): ReadonlyArray<IMessageHandlerDescriptor> {
+        return this._messageHandlers;
     }
 
     public get queries(): ReadonlyMap<string, IQueryDescriptor> {
@@ -32,7 +39,8 @@ export class ComponentType {
 
     constructor(public readonly type: ObjectType) {
         this._properties = [];
-        this._events = [];
+        this._eventHandlers = [];
+        this._messageHandlers = [];
         this._queries = new Map<string, IQueryDescriptor>();
         this._descriptor = { tag: "" };
         this.name = getObjectTypeName(type);
@@ -48,7 +56,11 @@ export class ComponentType {
     }
 
     registerEvent(event: EventName | string, selector: string, listener: EventListener): void {
-        this._events.push(new EventDefinition(event, selector, listener));
+        this._eventHandlers.push(new EventHandlerDefinition(event, selector, listener));
+    }
+
+    registerMessage<TMessage = any>(methodName: string, method: (m: TMessage) => void, messageType: ObjectType): void {
+        this._messageHandlers.push({ methodName, method, messageType });
     }
 
     registerQuery(name: string, descriptor: IQueryDescriptor): void {

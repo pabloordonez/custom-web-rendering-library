@@ -1,6 +1,6 @@
-import { EventName } from "./EventDefinition";
+import { EventName } from "./EventHandlerDefinition";
 
-export class EventListenerInstance {
+export class EventHandlerInstance {
     constructor(public readonly element: Element, public readonly event: EventName | string, public readonly func: EventListener) {}
 
     disconnect(): void {

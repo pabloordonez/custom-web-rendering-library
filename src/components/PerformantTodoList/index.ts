@@ -1,7 +1,7 @@
-import { ToDoItem, ToDoItemComponent } from "components/TodoList/TodoItem";
 import { ComponentBase } from "library/components";
-import { Component, EventHandler, Query } from "library/decorators/components";
+import { Component, EventHandler, MessageHandler, Query } from "library/decorators/components";
 import { html } from "library/interpolation";
+import { PerformantToDoItemComponent, ToDoItemDeletedMessage } from "./PerformantTodoItem";
 import styles from "./PerformantTodoList.module.scss";
 
 @Component({ tag: "perf-todo-list" })
@@ -19,18 +19,18 @@ export class PerformantToDoListComponent extends ComponentBase {
     @EventHandler("click", `#addButton`)
     onAddItemClick(): void {
         if (!this.itemViews) return;
-        const view = new ToDoItemComponent();
-        view.item = new ToDoItem(this.itemViews.children.length + 1, "");
+        const view = new PerformantToDoItemComponent();
+        view.item.index = this.itemViews.children.length + 1;
         this.itemViews.appendChild(view);
         this.updateCounter();
         this.invalidate(false);
     }
 
-    @EventHandler("onRemove", `todo-item`)
-    onRemoveItem(e: CustomEvent<ToDoItemComponent>): void {
-        const item = e.detail;
+    @MessageHandler()
+    onRemoveItem(message: ToDoItemDeletedMessage): void {
+        const item = message.toDoItem;
         this.itemViews?.removeChild(item);
-        this.itemViews.childNodes.forEach((x: ToDoItemComponent, i: number) => {
+        this.itemViews.childNodes.forEach((x: PerformantToDoItemComponent, i: number) => {
             x.item.index = i + 1;
             x.invalidate();
         });

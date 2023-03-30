@@ -1,13 +1,13 @@
-import { EventListenerInstance } from "./EventListenerInstance";
+import { EventHandlerInstance as EventHandlerInstance } from "./EventHandlerInstance";
 
 export type EventName = keyof HTMLElementEventMap;
 
-export class EventDefinition {
+export class EventHandlerDefinition {
     constructor(public readonly event: EventName | string, public readonly selector: string, public readonly func: EventListener) {}
 
-    connect(element: HTMLElement): EventListenerInstance[] {
+    connect(element: HTMLElement): EventHandlerInstance[] {
         const children = this.selector ? element.querySelectorAll(this.selector) : [element];
-        const eventListeners: EventListenerInstance[] = [];
+        const eventListeners: EventHandlerInstance[] = [];
 
         if (!children) eventListeners;
 
@@ -18,7 +18,7 @@ export class EventDefinition {
                 this.func.apply(element, [e]);
             };
             c.addEventListener(this.event, func);
-            eventListeners.push(new EventListenerInstance(c, this.event, func));
+            eventListeners.push(new EventHandlerInstance(c, this.event, func));
         }
 
         return eventListeners;
