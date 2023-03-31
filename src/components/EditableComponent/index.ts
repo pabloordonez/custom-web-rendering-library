@@ -6,10 +6,13 @@ import styles from "./EditableComponent.module.scss";
 @Component({ tag: "editable-component" })
 export class EditableComponent extends ComponentBase {
 	@Property()
-    headertext: string;
+    headerText: string;
 
 	@Property()
-    paragraphtext: string;
+    paragraphText: string;
+
+	@Property("contentEditable")
+	editable: boolean;
 
 	@Query(`.${styles.container}`)
     private container: HTMLDivElement;
@@ -26,27 +29,26 @@ export class EditableComponent extends ComponentBase {
 
 	@EventHandler('click', '#editButton')
 	onClick(): void {
-		const editable = !JSON.parse(this.getAttribute('contentEditable'));
-		this.setAttribute('contentEditable', editable.toString());
-		this.container.style.backgroundColor = editable ? `#${Math.floor(Math.random() * 16777215).toString(16)}` : '';
+		this.editable = !this.editable;
+		this.container.style.backgroundColor = this.editable ? `#${Math.floor(Math.random() * 16777215).toString(16)}` : '';
 
-		if (!editable) {
-			console.log(this.headertext);
-			console.log(this.paragraphtext);
+		if (!this.editable) {
+			console.log(this.headerText);
+			console.log(this.paragraphText);
 		}
 	}
 
 	@EventHandler('input')
 	onTextChange() {
-		this.headertext = this.header.innerText;
-		this.paragraphtext = this.paragraph.innerText;
+		this.headerText = this.header.innerText;
+		this.paragraphText = this.paragraph.innerText;
 	}
 
 	protected render(): string
 	{
 		return html`<div class="${styles.container}">
-			<h2>${this.headertext}</h2>
-			<p>${this.paragraphtext}</p>
+			<h2>${this.headerText}</h2>
+			<p>${this.paragraphText}</p>
 			<div>
                 <button id="editButton">Edit content</button>
             </div>

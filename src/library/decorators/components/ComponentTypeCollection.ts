@@ -1,5 +1,6 @@
 import { ObjectType } from "../../dependencyInjection";
 import { ComponentType } from "./ComponentType";
+import { propertyToAttribute } from "./IPropertyDescriptor";
 
 export class ComponentTypeCollection {
     private static _globalInstance: ComponentTypeCollection;
@@ -31,7 +32,10 @@ export class ComponentTypeCollection {
 
     defineAll(): void {
         for (const component of this._registeredTypes.values()) {
-            (component.type as any).observedAttributes = component.properties;
+            Object.defineProperty(component.type, "observedAttributes", {
+                value: Array.from(component.properties.values()).map(x => x.attribute ?? propertyToAttribute(x.name)),
+                writable: false
+            });
             customElements.define(component.descriptor.tag, component.type, { extends: component.descriptor.extends });
         }
     }

@@ -1,3 +1,4 @@
+import { attributeToProperty, IPropertyDescriptor, PropertyType } from "library/decorators/components/IPropertyDescriptor";
 import { DependencyContainer, DependencyCollection } from "library/dependencyInjection";
 import LoggingService from "library/services/logging/LoggingService";
 import { MessageBusService } from "library/services/messaging/MessageBus";
@@ -43,6 +44,7 @@ export class ComponentBase extends HTMLElement {
         this._dependencyContainer = this.getDependencyContainer();
         this._messageBus = this._dependencyContainer.resolve(MessageBusService);
         this._logger = this._dependencyContainer.resolve(LoggingService);
+        this.overrideProperties();
     }
 
     connectedCallback(): void {
@@ -74,10 +76,45 @@ export class ComponentBase extends HTMLElement {
         this.connectEventHandlers();
     }
 
-    protected attributeChangedCallback(name: string, oldValue: any, newValue: any) {
-        (this as any)[name] = newValue;
-        this.invalidate();
+    protected overrideProperties(): void {
+        if (!this.componentType.descriptor.autoProperties) return;
+        const properties = this.componentType.properties;
+
+        for (const propertyDescriptor of properties.values()) {
+            delete (this as any)[propertyDescriptor.name];
+            Object.defineProperty(this, propertyDescriptor.name, {
+                get: () => this.parseAttribute(propertyDescriptor, this.getAttribute(propertyDescriptor.attribute)),
+                set: x => this.setAttribute(propertyDescriptor.attribute, x?.toString())
+            });
+        }
     }
+
+    protected parseAttribute(propertyDescriptor: IPropertyDescriptor, value?: string): PropertyType | undefined {
+        if (value === undefined) return undefined;
+
+        switch (propertyDescriptor.type) {
+            case "number":
+                return Number(value);
+
+            case "boolean":
+                return Boolean(value);
+
+            default:
+                return value;
+        }
+    }
+
+    protected attributeChangedCallback(name: string, oldValue: any, newValue: any) {
+        const propertyName = attributeToProperty(name);
+        const property = this.componentType.properties.get(propertyName) ?? this.componentType.findPropertyByAttribute(name);
+
+        if (!property || !(property.name in this)) return;
+
+        this.onPropertyChanged(property, this.parseAttribute(property, oldValue), this.parseAttribute(property, newValue));
+        this.invalidate(this.componentType.descriptor.renderOnAttributeChange);
+    }
+
+    protected onPropertyChanged(name: IPropertyDescriptor, oldValue?: PropertyType, newValue?: PropertyType): void {}
 
     protected onCreated(): void {}
 

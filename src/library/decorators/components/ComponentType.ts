@@ -3,9 +3,10 @@ import { ObjectType, getObjectTypeName } from "../../dependencyInjection";
 import { IComponentDescriptor } from "./IComponentDescriptor";
 import { IQueryDescriptor } from "./IQueryDescriptor";
 import { IMessageHandlerDescriptor } from "./IMessageHandlerDescriptor";
+import { IPropertyDescriptor, PropertyTypeName } from "./IPropertyDescriptor";
 
 export class ComponentType {
-    private _properties: string[];
+    private _properties: Map<string, IPropertyDescriptor>;
 
     private _eventHandlers: EventHandlerDefinition[];
 
@@ -15,7 +16,7 @@ export class ComponentType {
 
     private _descriptor: IComponentDescriptor;
 
-    public get properties(): ReadonlyArray<string> {
+    public get properties(): ReadonlyMap<string, IPropertyDescriptor> {
         return this._properties;
     }
 
@@ -38,11 +39,11 @@ export class ComponentType {
     public readonly name: string;
 
     constructor(public readonly type: ObjectType) {
-        this._properties = [];
         this._eventHandlers = [];
         this._messageHandlers = [];
+        this._properties = new Map<string, IPropertyDescriptor>();
         this._queries = new Map<string, IQueryDescriptor>();
-        this._descriptor = { tag: "" };
+        this._descriptor = { tag: "", renderOnAttributeChange: true };
         this.name = getObjectTypeName(type);
         this.type = type;
     }
@@ -51,8 +52,8 @@ export class ComponentType {
         this._descriptor = descriptor;
     }
 
-    registerProperty(property: string): void {
-        this._properties.push(property);
+    registerProperty(name: string, type: PropertyTypeName,  attribute?: string): void {
+        this._properties.set(name, { name, type, attribute });
     }
 
     registerEvent(event: EventName | string, selector: string, listener: EventListener): void {
@@ -65,5 +66,13 @@ export class ComponentType {
 
     registerQuery(name: string, descriptor: IQueryDescriptor): void {
         this._queries.set(name, descriptor);
+    }
+
+    findPropertyByAttribute(attribute: string): IPropertyDescriptor {
+        for (const propertyDescriptor of this._properties.values()) {
+            if (propertyDescriptor.attribute === attribute) return propertyDescriptor;
+        }
+
+        return undefined;
     }
 }
