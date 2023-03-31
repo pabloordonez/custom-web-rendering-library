@@ -7,6 +7,7 @@ export * from "./EventHandlerDefinition";
 export * from "./EventHandlerInstance";
 export * from "./IComponentDescriptor";
 export * from "./IMessageHandlerDescriptor";
+export * from "./IPropertyDescriptor";
 export * from "./IQueryDescriptor";
 export * from "./MessageHandler";
 export * from "./Property";
