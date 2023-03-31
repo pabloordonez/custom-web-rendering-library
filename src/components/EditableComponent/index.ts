@@ -1,5 +1,5 @@
 import { ComponentBase } from "library/components";
-import { Component, EventHandler, Property, Query } from "library/decorators/components";
+import { Component, EventHandler, EventTargetSource, Property, Query } from "library/decorators/components";
 import { html } from "library/interpolation";
 import styles from "./EditableComponent.module.scss";
 

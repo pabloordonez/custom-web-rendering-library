@@ -1,4 +1,4 @@
-import { Component, Property, EventHandler, Query } from "library/decorators/components";
+import { Component, Property, EventHandler, Query, EventTargetSource } from "library/decorators/components";
 import { ComponentBase } from "library/components";
 import { html } from "library/interpolation";
 import styles from "./TestComponent.module.scss";
@@ -22,6 +22,11 @@ export class TestComponent extends ComponentBase {
     onClick(): void {
         if (!this.container) return;
         this.container.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    }
+
+    @EventHandler("keydown", EventTargetSource.document)
+    onDocumentClick(e: KeyboardEvent): void {
+        console.log(`Keyboard pressed: ${e.key}`);
     }
 
     @EventHandler("click", `.${styles.plus}`)

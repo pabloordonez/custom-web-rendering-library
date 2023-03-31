@@ -2,25 +2,48 @@ import { EventHandlerInstance as EventHandlerInstance } from "./EventHandlerInst
 
 export type EventName = keyof HTMLElementEventMap;
 
+export enum EventTargetSource {
+    element,
+    document,
+    window
+}
+
 export class EventHandlerDefinition {
-    constructor(public readonly event: EventName | string, public readonly selector: string, public readonly func: EventListener) {}
+    constructor(public readonly event: EventName | string, public readonly source: EventTargetSource | string, public readonly func: EventListener) {}
 
-    connect(element: HTMLElement): EventHandlerInstance[] {
-        const children = this.selector ? element.querySelectorAll(this.selector) : [element];
-        const eventListeners: EventHandlerInstance[] = [];
+    connect(targetElement: HTMLElement): EventHandlerInstance[] {
+        if (typeof this.source === "string") {
+            const children = this.source ? targetElement.querySelectorAll<HTMLElement>(this.source) : [targetElement];
+            const eventListeners: EventHandlerInstance[] = [];
 
-        if (!children) eventListeners;
+            if (!children) eventListeners;
 
-        for (let i = 0; i < children.length; i++) {
-            const c = children[i];
-            const func = (e: Event) => {
-                console.log(`${c.constructor.name}(${c.id})[${this.event}]`);
-                this.func.apply(element, [e]);
-            };
-            c.addEventListener(this.event, func);
-            eventListeners.push(new EventHandlerInstance(c, this.event, func));
+            for (let i = 0; i < children.length; i++) {
+                const sourceElement = children[i];
+                eventListeners.push(this.registerEventHandler(targetElement, sourceElement));
+            }
+
+            return eventListeners;
+        } else {
+            function getElement(elementSource: EventTargetSource): EventTarget {
+                switch (elementSource) {
+                    case EventTargetSource.document:
+                        return document;
+                    case EventTargetSource.window:
+                        return window;
+                    default:
+                        return targetElement;
+                }
+            }
+
+            const sourceElement = getElement(this.source);
+            return [this.registerEventHandler(targetElement, sourceElement)];
         }
+    }
 
-        return eventListeners;
+    private registerEventHandler(targetElement: HTMLElement, sourceElement: EventTarget): EventHandlerInstance {
+        const func = (e: Event) => this.func.apply(targetElement, [e]);
+        sourceElement.addEventListener(this.event, func);
+        return new EventHandlerInstance(sourceElement, this.event, func);
     }
 }

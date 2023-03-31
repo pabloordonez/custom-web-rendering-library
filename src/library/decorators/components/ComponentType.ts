@@ -1,4 +1,4 @@
-import { EventHandlerDefinition, EventName } from "./EventHandlerDefinition";
+import { EventHandlerDefinition, EventName, EventTargetSource } from "./EventHandlerDefinition";
 import { ObjectType, getObjectTypeName } from "../../dependencyInjection";
 import { IComponentDescriptor } from "./IComponentDescriptor";
 import { IQueryDescriptor } from "./IQueryDescriptor";
@@ -56,8 +56,8 @@ export class ComponentType {
         this._properties.set(name, { name, type, attribute });
     }
 
-    registerEvent(event: EventName | string, selector: string, listener: EventListener): void {
-        this._eventHandlers.push(new EventHandlerDefinition(event, selector, listener));
+    registerEvent(event: EventName | string, source: EventTargetSource | string, listener: EventListener): void {
+        this._eventHandlers.push(new EventHandlerDefinition(event, source, listener));
     }
 
     registerMessage<TMessage = any>(methodName: string, method: (m: TMessage) => void, messageType: ObjectType): void {

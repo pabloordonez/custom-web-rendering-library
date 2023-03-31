@@ -28,7 +28,7 @@ The framework must allow the following features:
 -   [x] Add support for event handlers.
 -   [X] Add support for message handlers.
 -   [X] Review attributes / properties names using lowercase.
--   [ ] Allow to add EventHandlers over special elements like document.
+-   [X] Allow to add EventHandlers over special elements like document.
 
 
 ## VSCode support
